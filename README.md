@@ -40,7 +40,9 @@ pnpm install
 
 ### 3. Copy the file `.env.template` and rename it to `.env` then put the port, the host of the authentication microservice and its port
 
-### 4. Running the app
+### 4. Have all the microservices running before launching this project
+
+### 5. Running the app
 
 ```bash
 # development
