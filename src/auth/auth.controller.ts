@@ -1,8 +1,8 @@
 import { AUTH_SERVICE } from 'src/config';
-import { Body, Controller, Get, HttpCode, Inject, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Inject, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { catchError } from 'rxjs';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { ChangePasswordDto, LoginUserDto, RegisterUserDto, VerifyUserDto } from './dto';
+import { ChangePasswordDto, LoginUserDto, RegisterUserDto, UpdateUserDto, VerifyUserDto } from './dto';
 import { AuthGuard } from './guards/auth.guard';
 
 @Controller('')
@@ -54,6 +54,20 @@ export class AuthController {
         throw new RpcException(error);
       })
     );
+
+  }
+
+  @HttpCode(200)
+  @Patch('user/:id')
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+
+    updateUserDto.id = id;
+
+    return this.client.send('auth.update.user', updateUserDto).pipe(
+      catchError(error => {
+        throw new RpcException(error);
+      })
+    )
 
   }
 
