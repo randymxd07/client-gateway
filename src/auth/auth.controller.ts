@@ -1,8 +1,8 @@
 import { AUTH_SERVICE } from 'src/config';
-import { Body, Controller, Get, HttpCode, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Inject, Patch, Post } from '@nestjs/common';
 import { catchError } from 'rxjs';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { LoginUserDto, RegisterUserDto, VerifyUserDto } from './dto';
+import { ChangePasswordDto, LoginUserDto, RegisterUserDto, VerifyUserDto } from './dto';
 
 @Controller('')
 export class AuthController {
@@ -35,6 +35,16 @@ export class AuthController {
   @Get('verify-user')
   verifyUser(@Body() verifyUserDto: VerifyUserDto) {
     return this.client.send('auth.verify.user', verifyUserDto).pipe(
+      catchError(error => {
+        throw new RpcException(error);
+      })
+    )
+  }
+
+  @HttpCode(200)
+  @Patch('change-password')
+  changePassword(@Body() changePasswordDto: ChangePasswordDto) {
+    return this.client.send('auth.change.password', changePasswordDto).pipe(
       catchError(error => {
         throw new RpcException(error);
       })
